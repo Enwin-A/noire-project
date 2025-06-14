@@ -42,6 +42,7 @@ INSTALLED_APPS = [
 
     'rest_framework',
     'game',
+    # 'game.apps.GameConfig',  # Ensure the app is registered
 ]
 
 MIDDLEWARE = [
