@@ -4,12 +4,11 @@ from django.db import models
 
 class Game(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    # Store the story outline generated at game start
     outline = models.JSONField()
-    # Current level number (1 to 10)
     current_level = models.IntegerField(default=1)
-    # History of choices: list of dicts: {'level': int, 'path': [ {'node_id': str, 'choice_text': str}, ... ] }
     choices_history = models.JSONField(default=list)
+    # Cache for background images: maps scene_description to {image_name, url, prompt}
+    bg_cache = models.JSONField(default=dict)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -19,9 +18,7 @@ class Game(models.Model):
 class LevelData(models.Model):
     game = models.ForeignKey(Game, on_delete=models.CASCADE, related_name='levels')
     level_number = models.IntegerField()
-    # Role: 'detective' or 'journalist'
     role = models.CharField(max_length=20)
-    # The generated content: JSON structure with dialogue tree, including 'scene_description' in nodes
     content = models.JSONField()
     created_at = models.DateTimeField(auto_now_add=True)
 
